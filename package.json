@@ -1,0 +1,35 @@
+{
+  "name": "time-slow",
+  "version": "1.0.0",
+  "description": "Nuxt.js and web3 template project",
+  "author": "pyyding <kaspar.pyyding@gmail.com>",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "lintfix": "eslint --fix --ext .js,.vue --ignore-path .gitignore --ignore-pattern migrations/ --ignore-pattern test/ .",
+    "precommit": "npm run lint"
+  },
+  "dependencies": {
+    "element-ui": "^2.4.6",
+    "nuxt": "^1.0.0",
+    "openzeppelin-solidity": "^1.12.0",
+    "truffle": "^4.1.13",
+    "truffle-contract": "^3.0.6",
+    "web3": "^0.20.0",
+    "websocket": "^1.0.26"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.3",
+    "eslint": "^4.19.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-friendly-formatter": "^3.0.0",
+    "eslint-loader": "^1.9.0",
+    "eslint-plugin-prettier": "^2.6.0",
+    "eslint-plugin-vue": "^4.5.0",
+    "prettier": "^1.12.1"
+  }
+}
