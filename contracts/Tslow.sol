@@ -1,5 +1,4 @@
 pragma solidity ^0.4.24;
-pragma experimental ABIEncoderV2;
 
 
 contract Tslow {
@@ -13,6 +12,7 @@ contract Tslow {
     }
 
     struct Comment {
+        uint id;
         uint eventId;
         address owner;
         string content;
@@ -38,8 +38,13 @@ contract Tslow {
     }
 
     function levelOf(address owner) public view returns (uint) {
+        //  0 -  9 -> level 1
+        // 10 - 13 -> level 2
+        // 14 - 19 -> level 3
+        // 20 - 27 -> level 4
+        // ...
         uint ownerpoints = pointsOf(owner);
-        uint target = 10;
+        uint target = 8;
         for(uint i = 1; i < MAX_LEVEL; i++) {
             target = target + i * 2;
             if (target > ownerpoints) {
@@ -48,12 +53,11 @@ contract Tslow {
         }
         return MAX_LEVEL;
     }
-
     function myPoints() public view returns (uint) {
         return pointsOf(msg.sender);
     }
 
-    function mylevel() public view returns (uint) {
+    function myLevel() public view returns (uint) {
         return levelOf(msg.sender);
     }
 
@@ -80,25 +84,28 @@ contract Tslow {
     }
 
     function postComment(uint eventId, string content) public {
+        uint id = comments.length;
         address owner = msg.sender;
         uint ts = now;
-        Comment memory comment = Comment(eventId, owner, content, ts);
+        Comment memory comment = Comment(id, eventId, owner, content, ts);
         comments.push(comment);
         commentCountOf[msg.sender] ++;
         emit CommentPosted(eventId, owner, content, ts);
     }
 
-    function getEvents() public view returns (Event[]) {
-        return events;
+    function getEventIds() public view returns (uint[]) {
+        uint[] memory rs;
+        for(uint i = 1; i < events.length; i++) {
+            rs[i-1] = events[i].id;
+        }
+        return rs;
     }
 
-    function getCommentByEvent(uint eventId) public view returns (Comment[]) {
-        Comment[] rs;
-        Comment comment;
+    function getCommentIdsByEvent(uint eventId) public view returns (uint[]) {
+        uint[] memory rs;
         for(uint i = 1; i < comments.length; i++) {
-            comment = comments[i];
-            if (comment.eventId == eventId) {
-                rs.push(comment);
+            if (comments[i].eventId == eventId) {
+                rs[i-1] = comments[i].id;
             }
         }
         return rs;
