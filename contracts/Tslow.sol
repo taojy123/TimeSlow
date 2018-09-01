@@ -74,38 +74,46 @@ contract Tslow {
     }
 
     function postEvent(string title, string content) public {
+        assert(keccak256(title) != keccak256(""));
+        assert(keccak256(content) != keccak256(""));
         uint id = events.length;
         address owner = msg.sender;
-        uint ts = now;
-        Event memory _event = Event(id, owner, title, content, ts);
-        events.push(_event);
+        events.push(Event(id, owner, title, content, now));
         eventCountOf[msg.sender] ++;
-        emit EventPosted(id, owner, title, content, ts);
+        emit EventPosted(id, owner, title, content, now);
     }
 
     function postComment(uint eventId, string content) public {
+        assert(keccak256(content) != keccak256(""));
         uint id = comments.length;
         address owner = msg.sender;
-        uint ts = now;
-        Comment memory comment = Comment(id, eventId, owner, content, ts);
-        comments.push(comment);
+        comments.push(Comment(id, eventId, owner, content, now));
         commentCountOf[msg.sender] ++;
-        emit CommentPosted(eventId, owner, content, ts);
+        emit CommentPosted(eventId, owner, content, now);
     }
 
     function getEventIds() public view returns (uint[]) {
-        uint[] memory rs;
-        for(uint i = 1; i < events.length; i++) {
-            rs[i-1] = events[i].id;
+        uint[] memory rs = new uint[](events.length);
+        for(uint i = 0; i < events.length; i++) {
+            rs[i] = events[i].id;
         }
         return rs;
     }
 
     function getCommentIdsByEvent(uint eventId) public view returns (uint[]) {
-        uint[] memory rs;
-        for(uint i = 1; i < comments.length; i++) {
+        uint counter = 0;
+        uint i = 0;
+        for(i = 0; i < comments.length; i++) {
             if (comments[i].eventId == eventId) {
-                rs[i-1] = comments[i].id;
+                counter++;
+            }
+        }
+        uint[] memory rs = new uint[](counter);
+        counter = 0;
+        for(i = 0; i < comments.length; i++) {
+            if (comments[i].eventId == eventId) {
+                rs[counter] = comments[i].id;
+                counter++;
             }
         }
         return rs;

@@ -1,0 +1,8 @@
+- [x] 使用metamask
+- [x] 加评论页和用户详情页
+- [ ] element ui
+- [ ] 使用事件
+- [ ] 上测试链
+- [ ] 使用store存
+- [ ] 使用 async await
+- [ ] 使用 mixin
