@@ -28,7 +28,7 @@ contract Tslow {
     mapping (address => string) public nicknameOf;
 
     event EventPosted(uint id, address indexed owner, string title, string content, uint ts);
-    event CommentPosted(uint eventId, address indexed owner, string content, uint ts);
+    event CommentPosted(uint id, uint eventId, address indexed owner, string content, uint ts);
 
     constructor() public {
     }
@@ -87,9 +87,9 @@ contract Tslow {
         assert(keccak256(content) != keccak256(""));
         uint id = comments.length;
         address owner = msg.sender;
-        comments.push(Comment(id, eventId, owner, content, now));
+        // comments.push(Comment(id, eventId, owner, content, now));
         commentCountOf[msg.sender] ++;
-        emit CommentPosted(eventId, owner, content, now);
+        emit CommentPosted(id, eventId, owner, content, now);
     }
 
     function getEventIds() public view returns (uint[]) {

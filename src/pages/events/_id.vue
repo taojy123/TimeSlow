@@ -75,6 +75,8 @@ export default {
       })
     },
     loadData() {
+      this.text = ''
+      this.comments = []
       this.tslow.events(this.eventId).then(r => {
         this.owner = r[1]
         this.title = r[2]
@@ -83,30 +85,37 @@ export default {
         this.tslow.nicknameOf(this.owner).then(nickname => {
           this.ownerNickname = nickname || this.owner
         })
-      })
-      this.text = ''
-      this.tslow.getCommentIdsByEvent(this.eventId).then(ids => {
-        this.comments = []
-        for (let commentId of ids) {
-          this.tslow.comments(commentId).then(r => {
-            const id = r[0]
-            const eventId = r[1]
-            const owner = r[2]
-            const content = r[3]
-            const ts = r[4]
-            this.tslow.nicknameOf(owner).then(nickname => {
-              nickname = nickname || owner
-              this.comments.push({
-                id,
-                eventId,
-                owner,
-                content,
-                ts,
-                nickname
-              })
-            })
+        this.tslow
+          .allEvents({ fromBlock: 0, toBlock: 'latest' })
+          .get((err, events) => {
+            console.log(err, events)
+            for (let e of events) {
+              if (
+                e.event == 'CommentPosted' &&
+                e.args.eventId == this.eventId
+              ) {
+                this.showCommentByEvent(e)
+              }
+            }
           })
-        }
+      })
+    },
+    showCommentByEvent(event) {
+      const id = event.args.id
+      const eventId = event.args.eventId
+      const owner = event.args.owner
+      const content = event.args.content
+      const ts = event.args.ts
+      this.tslow.nicknameOf(owner).then(nickname => {
+        nickname = nickname || owner
+        this.comments.push({
+          id,
+          eventId,
+          owner,
+          content,
+          ts,
+          nickname
+        })
       })
     },
     display(ts) {

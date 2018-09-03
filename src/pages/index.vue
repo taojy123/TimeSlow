@@ -1,23 +1,53 @@
 <template>
   <div>
-    <h1>Time Slow</h1>
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/' }">Time Slow</el-breadcrumb-item>
+    </el-breadcrumb>
     <p>{{ account }}</p>
     <p>{{ nickname }}</p>
     <p>my level: {{ level }}, points: {{ points }}</p>
-    <div v-for="event in events" :key="`event-${event.id}}`" @click="goToEvent(event.id)">
-      <p>{{ event.title }}</p>
-      <p>{{ event.content }}</p>
-      <p>{{ display(event.ts) }}</p>
-    </div>
-    <div>
-      <input v-model="title" type="text">
-      <textarea v-model="content" />
-      <button @click="postEvent">发布事件</button>
-    </div>
-    <div>
-      <input v-model="nickname" type="text">
-      <button @click="setNickname">设置昵称</button>
-    </div>
+
+    <el-card v-for="event in events" :key="`event-${event.id}}`" class="box-card">
+      <div slot="header" class="clearfix" @click="goToEvent(event.id)">
+        <span>{{ event.title }}</span>
+        <span style="float: right; padding: 3px 0">{{ display(event.ts) }}</span>
+      </div>
+      <div @click="goToEvent(event.id)">
+        {{ event.content }}
+      </div>
+    </el-card>
+
+
+    <el-card>
+      <div slot="header" class="clearfix">
+        <span>创建事件</span>
+      </div>
+      <el-form ref="form" label-width="80px">
+        <el-form-item label="标题">
+          <el-input v-model="title"/>
+        </el-form-item>
+        <el-form-item label="内容">
+          <el-input v-model="content" type="textarea"/>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="postEvent">立即创建</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+
+    <el-card>
+      <div slot="header" class="clearfix">
+        <span>设置我的昵称</span>
+      </div>
+      <el-form label-width="80px">
+        <el-form-item label="昵称">
+          <el-input v-model="nickname"/>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="postEvent">确定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
   </div>
 </template>
 
@@ -136,4 +166,15 @@ export default {
 </script>
 
 <style>
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: '';
+}
+.clearfix:after {
+  clear: both;
+}
+.el-card {
+  margin: 20px 50px;
+}
 </style>

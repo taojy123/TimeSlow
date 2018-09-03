@@ -43,6 +43,6 @@ module.exports = {
   router: {
     base: '/'
   },
-  plugins: ['~/plugins/element-ui'],
-  css: ['element-ui/lib/theme-chalk/index.css']
+  css: ['element-ui/lib/theme-chalk/index.css'],
+  plugins: ['~/plugins/element-ui']
 }
