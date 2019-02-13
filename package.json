@@ -21,7 +21,8 @@
     "truffle": "^4.1.13",
     "truffle-contract": "^3.0.6",
     "web3": "^0.20.0",
-    "websocket": "^1.0.26"
+    "websocket": "^1.0.26",
+    "lodash": "^4.17.11"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.3",
